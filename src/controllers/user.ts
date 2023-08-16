@@ -68,6 +68,7 @@ const generateToken = async (req: Request, res: Response) => {
 
     if (result.length != 0 && (await bcrypt.compare(password, result[0].password))) {
         const accessToken = jwt.sign({
+            userid: result[0].id,
             username: username,
             password: password
         }, 

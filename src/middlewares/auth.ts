@@ -18,7 +18,8 @@ const verifyToken = (req: Request, res: Response, next: NextFunction) => {
             matches = AuthString[0].match(tokenRegEx)
         }
         token = matches[1];     
-        jwt.verify(token, process.env.JWT_SECRET_KEY);
+        const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
+        req.body.user = user;
     } catch (err) {
         return res.status(401).json({
             status: "error",

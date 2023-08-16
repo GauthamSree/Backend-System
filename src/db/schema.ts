@@ -1,4 +1,4 @@
-import { integer, pgTable, serial, text, varchar } from 'drizzle-orm/pg-core';
+import { AnyPgColumn, integer, pgTable, primaryKey, serial, text, varchar } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
     id: serial('id').primaryKey(),
@@ -12,6 +12,11 @@ export const users = pgTable('users', {
 
 
 export const userData = pgTable('userData', {
-    key: varchar('key', { length: 30 }).primaryKey().notNull(),
+    userId: integer('user_id').notNull().references((): AnyPgColumn => users.id),
+    key: varchar('key', { length: 30 }).notNull(),
     value: varchar('value', { length: 30 }).notNull(),
+}, (table) => {
+    return {
+      pk: primaryKey(table.userId, table.key),
+    };
 });
