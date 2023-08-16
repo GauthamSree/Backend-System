@@ -47,6 +47,117 @@ const postData = async (req: Request, res: Response) => {
     }); 
 }
 
+const getDataByKey = async (req: Request, res: Response) => {
+    const userInfo = req.body.user;
+    const key = req.params.key;
+
+    if (!key || typeof key !== 'string' || key.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "INVALID_KEY",
+            message: "The provided key is not valid or missing."
+        });
+    }
+    
+    const userId: number = userInfo['userid']
+    const result = await db.select().from(userData).where(and(eq(userData.userId, userId), eq(userData.key, key)));
+
+    if (result.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "KEY_NOT_FOUND",
+            message: "The provided key does not exist in the database."
+        }); 
+    }
+    
+    return res.status(200).json({
+        "status": "success",
+        "data": {
+          "key": result[0].key,
+          "value": result[0].value
+        }
+    }); 
+}
+
+const updateDataByKey = async (req: Request, res: Response) => {
+    const userInfo = req.body.user;
+    const key = req.params.key;
+    const value = req.body.value;
+
+    if (!key || typeof key !== 'string' || key.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "INVALID_KEY",
+            message: "The provided key is not valid or missing."
+        });
+    }
+    
+    const userId: number = userInfo['userid']
+    const result = await db.select().from(userData).where(and(eq(userData.userId, userId), eq(userData.key, key)));
+
+    if (result.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "KEY_NOT_FOUND",
+            message: "The provided key does not exist in the database."
+        }); 
+    }
+
+    await db.update(userData).set({
+        value: value
+    }).where(
+        and(
+            eq(userData.userId, userId), 
+            eq(userData.key, key)
+        )
+    )
+    
+    return res.status(200).json({
+        "status": "success",
+        "message": "Data updated successfully."
+    }); 
+}
+
+const deleteDataByKey = async (req: Request, res: Response) => {
+    const userInfo = req.body.user;
+    const key = req.params.key;
+
+    if (!key || typeof key !== 'string' || key.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "INVALID_KEY",
+            message: "The provided key is not valid or missing."
+        });
+    }
+    
+    const userId: number = userInfo['userid']
+    const result = await db.select().from(userData).where(and(eq(userData.userId, userId), eq(userData.key, key)));
+
+    if (result.length == 0) {
+        return res.status(200).json({
+            status: "error",
+            code: "KEY_NOT_FOUND",
+            message: "The provided key does not exist in the database."
+        }); 
+    }
+
+    await db.delete(userData)
+        .where(and(
+            eq(userData.userId, userId), 
+            eq(userData.key, key)
+        )
+    )
+    
+    return res.status(200).json({
+        "status": "success",
+        "message": "Data deleted successfully."
+    }); 
+}
+
+
 export default {
-    postData
+    postData,
+    getDataByKey,
+    updateDataByKey,
+    deleteDataByKey
 }
