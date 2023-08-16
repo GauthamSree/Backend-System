@@ -3,7 +3,7 @@ import services from '../services/data.js'
 
 const postData = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo = req.body.user;
+        const userInfo = req.user;
         const key = req.body.key;
         const value = req.body.value;
     
@@ -17,7 +17,7 @@ const postData = async (req: Request, res: Response, next: NextFunction) => {
 
 const getDataByKey = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo = req.body.user;
+        const userInfo = req.user;
         const key = req.params.key;
         
         const result = await services.getDataByKey(userInfo, key); 
@@ -30,7 +30,7 @@ const getDataByKey = async (req: Request, res: Response, next: NextFunction) => 
 
 const updateDataByKey = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo = req.body.user;
+        const userInfo = req.user;
         const key = req.params.key;
         const value = req.body.value;
         
@@ -44,7 +44,7 @@ const updateDataByKey = async (req: Request, res: Response, next: NextFunction) 
 
 const deleteDataByKey = async (req: Request, res: Response, next: NextFunction) => {
     try {
-        const userInfo = req.body.user;
+        const userInfo = req.user;
         const key = req.params.key;
         
         const result = await services.deleteDataByKey(userInfo, key); 

@@ -1,25 +1,19 @@
 import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
-import { NextFunction, Request, Response } from 'express'
+import { Request, NextFunction, Response } from 'express'
 
 dotenv.config();
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
-    const AuthString = req.headers["authentication"];
-    let tokenRegEx: RegExp = /^Bearer (\w+)+/;
-    let matches: RegExpMatchArray;
-    let token: string;
-  
+    const AuthString = req.headers['authorization'];
+    let tokenRegEx: RegExp = /^Bearer ([\w-]*\.[\w-]*\.[\w-]*)+/;
     try {
-        if (typeof AuthString === 'string') {
-            matches = AuthString.match(tokenRegEx)
-        } else {
-            matches = AuthString[0].match(tokenRegEx)
-        }
-        token = matches[1];     
+        const matches = AuthString.match(tokenRegEx)
+        const token = matches[1];
         const user = jwt.verify(token, process.env.JWT_SECRET_KEY);
-        req.body.user = user;
+        req.user = user;
     } catch (err) {
+        console.log(err)
         return res.status(401).json({
             status: "error",
             message: "INVALID_TOKEN"

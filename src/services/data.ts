@@ -1,9 +1,10 @@
-import { NextFunction, Request, Response } from 'express'
+import jwt from 'jsonwebtoken';
 import { userData } from '../db/schema.js';
 import { db } from '../db/config.server.js';
 import { and, eq } from 'drizzle-orm';
 
-const addData = async (userInfo: object, key: string, value: string) => {
+
+const addData = async (userInfo: jwt.JwtPayload | string, key: string, value: string) => {
     if (!key || typeof key !== 'string' || key.length == 0) {
         return {
             status: "error",
@@ -43,7 +44,7 @@ const addData = async (userInfo: object, key: string, value: string) => {
     }
 }
 
-const getDataByKey = async (userInfo: object, key: string) => {    
+const getDataByKey = async (userInfo: jwt.JwtPayload | string, key: string) => {    
     if (!key || typeof key !== 'string' || key.length == 0) {
         return {
             status: "error",
@@ -72,7 +73,7 @@ const getDataByKey = async (userInfo: object, key: string) => {
     }; 
 }
 
-const updateDataByKey = async (userInfo: object, key: string, value: string) => {
+const updateDataByKey = async (userInfo: jwt.JwtPayload | string, key: string, value: string) => {
     if (!key || typeof key !== 'string' || key.length == 0) {
         return {
             status: "error",
@@ -107,7 +108,7 @@ const updateDataByKey = async (userInfo: object, key: string, value: string) => 
     }
 }
 
-const deleteDataByKey = async (userInfo: object, key: string) => {
+const deleteDataByKey = async (userInfo: jwt.JwtPayload | string, key: string) => {
     if (!key || typeof key !== 'string' || key.length == 0) {
         return {
             status: "error",
