@@ -20,24 +20,37 @@
 ## Installation (locally)
 
 1. Clone the repository
-2. Build and run the TypeScript code:
+2. Install all required modules:
     ```zsh
     npm install
+    ```
+3. Added `.env` file
+    ```
+    NODE_ENV=DEVELOPMENT
+    PORT=3000
+
+    DB_CONNECTION=postgres://postgres:@localhost:5432/backendsystem
+    JWT_SECRET_KEY=accessTokenPrivateKey
+    ```
+4. Run the typescript code:
+    ```zsh
     npm run dev
     ```
 
 ## DB Schema
 ```SQL
 CREATE TABLE IF NOT EXISTS "userData" (
-	"key" varchar(30) PRIMARY KEY NOT NULL,
-	"value" varchar(30) NOT NULL
+	"user_id" integer NOT NULL,
+	"key" varchar(30) NOT NULL,
+	"value" varchar(30) NOT NULL,
+	CONSTRAINT userData_user_id_key PRIMARY KEY("user_id","key")
 );
 
 CREATE TABLE IF NOT EXISTS "users" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"username" varchar(30) NOT NULL,
 	"email" varchar(30) NOT NULL,
-	"password" varchar(30) NOT NULL,
+	"password" varchar(255) NOT NULL,
 	"full_name" text NOT NULL,
 	"age" integer NOT NULL,
 	"gender" varchar(10) NOT NULL
