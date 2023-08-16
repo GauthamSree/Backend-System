@@ -4,7 +4,7 @@ export const users = pgTable('users', {
     id: serial('id').primaryKey(),
     username: varchar('username', { length: 30 }).notNull(),
     email: varchar('email', { length: 30 }).notNull(),
-    password: varchar('password', { length: 30 }).notNull(),
+    password: varchar('password', { length: 255 }).notNull(),
     fullName: text('full_name').notNull(),
     age: integer('age').notNull(),
     gender: varchar('gender', { length: 10 }).notNull(),
