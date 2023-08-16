@@ -2,7 +2,6 @@ import jwt from 'jsonwebtoken';
 import dotenv from 'dotenv';
 import { NextFunction, Request, Response } from 'express'
 
-
 dotenv.config();
 
 const verifyToken = (req: Request, res: Response, next: NextFunction) => {
